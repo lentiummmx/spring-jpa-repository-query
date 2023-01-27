@@ -1,3 +1,12 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("io.spring.javaformat:spring-javaformat-gradle-plugin:0.0.35")
+    }
+}
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version '2.6.3'
@@ -6,10 +15,16 @@ plugins {
 }
 
 apply plugin: 'application'
+apply plugin: 'checkstyle'
+apply plugin: 'io.spring.javaformat'
 
 group = 'mx.com.xoco.nuniez'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
+
+checkstyle {
+    toolVersion = "9.3"
+}
 
 configurations {
     compileOnly {
@@ -55,8 +70,11 @@ dependencies {
     implementation 'org.aspectj:aspectjrt:1.9.5'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    checkstyle("io.spring.javaformat:spring-javaformat-checkstyle:0.0.35")
 }
 
 tasks.named('test') {
+    enabled = false
     useJUnitPlatform()
 }

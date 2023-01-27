@@ -16,9 +16,7 @@ import java.util.stream.Stream;
 
 public class QueryHintBinder {
 
-    public static <E> Set<String> getQueryHints(
-            @NonNull Class<E> entityClass,
-            @NonNull String queryName) {
+    public static <E> Set<String> getQueryHints(@NonNull Class<E> entityClass, @NonNull String queryName) {
         Stream<String> customQueryHints = Stream.empty();
 
         NamedQueries namedQueriesAnn = entityClass.getAnnotation(NamedQueries.class);
@@ -50,11 +48,14 @@ public class QueryHintBinder {
 
     private static Stream<String> extractCustomQueryHints(@NonNull String queryName, QueryHint[] queryHints) {
         QueryHintDefinition hints = new QueryHintDefinition(queryHints);
-        // PgsqlQueryHints.getDefinedHints().forEach(hintName -> hints.getString(queryName, hintName));
-        // Stream<String> customQueryHints = PgsqlQueryHints.getDefinedHints().stream().map(hintName ->
+        // PgsqlQueryHints.getDefinedHints().forEach(hintName ->
+        // hints.getString(queryName, hintName));
+        // Stream<String> customQueryHints =
+        // PgsqlQueryHints.getDefinedHints().stream().map(hintName ->
         // hints.getString(queryName, hintName));
         // return customQueryHints;
         return PgsqlQueryHints.getDefinedHints().stream().map(hintName -> hints.getString(queryName, hintName));
 
     }
+
 }

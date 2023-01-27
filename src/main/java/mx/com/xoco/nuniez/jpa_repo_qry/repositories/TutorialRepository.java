@@ -9,10 +9,11 @@ import javax.persistence.QueryHint;
 import java.util.List;
 
 public interface TutorialRepository extends JpaRepository<Tutorial, Long>, CustomTutorialRepository {
+
     List<Tutorial> findAll();
 
     @Query("SELECT t FROM Tutorial t WHERE t.published=?1")
-    @QueryHints(value = {@QueryHint(name = "QWERTY_ASDFGH", value = "qwerty_asdfgh")})
+    @QueryHints(value = { @QueryHint(name = "QWERTY_ASDFGH", value = "qwerty_asdfgh") })
     List<Tutorial> findByPublished(boolean isPublished);
 
     @Query("SELECT t FROM Tutorial t WHERE t.title LIKE %?1%")
@@ -22,4 +23,5 @@ public interface TutorialRepository extends JpaRepository<Tutorial, Long>, Custo
     List<Tutorial> findByTitleLikeCaseInsensitive(String title);
 
     Tutorial findByTitleAndPublished(String title, boolean published);
+
 }

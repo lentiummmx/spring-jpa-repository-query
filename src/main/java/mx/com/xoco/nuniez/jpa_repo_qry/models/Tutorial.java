@@ -30,36 +30,27 @@ import java.util.Date;
 import java.util.Objects;
 
 @Entity
-//@EntityListeners(AuditingEntityListener.class)
+// @EntityListeners(AuditingEntityListener.class)
 @Table(name = "tutorials")
 @Builder(toBuilder = true)
 @Getter
 @Setter(value = AccessLevel.PACKAGE)
 @ToString
-//@RequiredArgsConstructor
+// @RequiredArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-@NamedQueries(value = {
-        @NamedQuery(name = "NQ_TUTORIALS_PUBLISHED",
-                query = "SELECT t FROM Tutorial t WHERE t.published=:published",
-                hints = {@QueryHint(name = PgsqlQueryHints.HINT_CUSTOM_QUERY_HINT,
-                        value = "IndexScan(tutorials idx)")})})
-@NamedNativeQueries({
-        @NamedNativeQuery(name = "NNQ_TUTORIALS_PUBLISHED",
-                query = "SELECT * FROM tutorials tut " +
-                        "WHERE title = :title AND published = :published " +
-                        "UNION " +
-                        "SELECT * FROM tutorials tut " +
-                        "WHERE description like :description AND published = :published",
-                hints = {@QueryHint(name = PgsqlQueryHints.HINT_INDEX_SCAN,
-                        value = "IndexScan(tutorials idx)")},
-                resultClass = Tutorial.class),
+@NamedQueries(value = { @NamedQuery(name = "NQ_TUTORIALS_PUBLISHED",
+        query = "SELECT t FROM Tutorial t WHERE t.published=:published",
+        hints = { @QueryHint(name = PgsqlQueryHints.HINT_CUSTOM_QUERY_HINT, value = "IndexScan(tutorials idx)") }) })
+@NamedNativeQueries({ @NamedNativeQuery(name = "NNQ_TUTORIALS_PUBLISHED",
+        query = "SELECT * FROM tutorials tut " + "WHERE title = :title AND published = :published " + "UNION "
+                + "SELECT * FROM tutorials tut " + "WHERE description like :description AND published = :published",
+        hints = { @QueryHint(name = PgsqlQueryHints.HINT_INDEX_SCAN, value = "IndexScan(tutorials idx)") },
+        resultClass = Tutorial.class),
         @NamedNativeQuery(name = "Tutorial.findByTitleAndPublished",
-                query = "SELECT * FROM tutorials tut " +
-                        "WHERE title = ?1 AND published = ?2",
-                hints = {@QueryHint(name = PgsqlQueryHints.HINT_INDEX_SCAN,
-                        value = "IndexScan(tutorials idx)")},
-                resultClass = Tutorial.class)})
+                query = "SELECT * FROM tutorials tut " + "WHERE title = ?1 AND published = ?2",
+                hints = { @QueryHint(name = PgsqlQueryHints.HINT_INDEX_SCAN, value = "IndexScan(tutorials idx)") },
+                resultClass = Tutorial.class) })
 public class Tutorial extends BaseModel {
 
     @Id
@@ -76,8 +67,10 @@ public class Tutorial extends BaseModel {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        if (this == o)
+            return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
+            return false;
         Tutorial tutorial = (Tutorial) o;
         return id != null && Objects.equals(id, tutorial.id);
     }

@@ -7,8 +7,9 @@ import java.util.Set;
 public class PgsqlQueryHints {
 
     /**
-     * For to use to writing hint plans that contains hinting phrases. Hint phrases consist of hint
-     * names followed by hint parameters enclosed in parentheses and delimited by spaces. <br>
+     * For to use to writing hint plans that contains hinting phrases. Hint phrases
+     * consist of hint names followed by hint parameters enclosed in parentheses and
+     * delimited by spaces. <br>
      * <code>
      * yugabyte=# &#47;*+ <br>
      * yugabyte*#    HashJoin(a b) <br>
@@ -20,8 +21,8 @@ public class PgsqlQueryHints {
 
     /*
      * Hints for scan methods - see:
-     * https://docs.yugabyte.com/preview/explore/query-1-performance/pg-hint-plan/#hints-for-scan-
-     * methods
+     * https://docs.yugabyte.com/preview/explore/query-1-performance/pg-hint-plan/#hints-
+     * for-scan- methods
      */
 
     /**
@@ -62,21 +63,21 @@ public class PgsqlQueryHints {
     public static final String HINT_NO_INDEX_ONLY_SCAN = "no_index_only_scan";
 
     /**
-     * IndexScanRegexp(table regex) - Enable index scan on the table whose indices match with the
-     * regular expression defined by regex.
+     * IndexScanRegexp(table regex) - Enable index scan on the table whose indices match
+     * with the regular expression defined by regex.
      */
     public static final String HINT_INDEX_SCAN_REGEXP = "index_scan_regexp";
 
     /**
-     * IndexOnlyScanRegexp(table regex) - Do not enable index scan on the table whose indices match with
-     * the regular expression defined by regex.
+     * IndexOnlyScanRegexp(table regex) - Do not enable index scan on the table whose
+     * indices match with the regular expression defined by regex.
      */
     public static final String HINT_INDEX_ONLY_SCAN_REGEXP = "index_only_scan_regexp";
 
     /*
      * Hints for join methods - see:
-     * https://docs.yugabyte.com/preview/explore/query-1-performance/pg-hint-plan/#hints-for-join-
-     * methods
+     * https://docs.yugabyte.com/preview/explore/query-1-performance/pg-hint-plan/#hints-
+     * for-join- methods
      */
 
     /**
@@ -101,8 +102,8 @@ public class PgsqlQueryHints {
 
     /*
      * Hints for joining order - see:
-     * https://docs.yugabyte.com/preview/explore/query-1-performance/pg-hint-plan/#hints-for-joining-
-     * order
+     * https://docs.yugabyte.com/preview/explore/query-1-performance/pg-hint-plan/#hints-
+     * for-joining- order
      */
 
     /**
@@ -113,113 +114,118 @@ public class PgsqlQueryHints {
 
     /*
      * Setting working memory - see:
-     * https://docs.yugabyte.com/preview/explore/query-1-performance/pg-hint-plan/#setting-working-
-     * memory
+     * https://docs.yugabyte.com/preview/explore/query-1-performance/pg-hint-plan/#setting
+     * -working- memory
      */
 
     /**
-     * Set(work_mem "1MB") - Leverage the <i>work_mem</i> setting in PostgreSQL to improve the
-     * performance of slow queries that sort, join, or aggregate large sets of table rows.
+     * Set(work_mem "1MB") - Leverage the <i>work_mem</i> setting in PostgreSQL to improve
+     * the performance of slow queries that sort, join, or aggregate large sets of table
+     * rows.
      */
     public static final String HINT_WORK_MEM = "work_mem";
 
     /*
      * Configuring the planner method - see:
-     * https://docs.yugabyte.com/preview/explore/query-1-performance/pg-hint-plan/#configuring-the-
-     * planner-method,
-     * https://www.postgresql.org/docs/11/runtime-config-query.html#RUNTIME-CONFIG-QUERY-ENABLE
+     * https://docs.yugabyte.com/preview/explore/query-1-performance/pg-hint-plan/#
+     * configuring-the- planner-method,
+     * https://www.postgresql.org/docs/11/runtime-config-query.html#RUNTIME-CONFIG-QUERY-
+     * ENABLE
      */
 
     /**
-     * Set(enable_hashagg off) - Enables or disables the query planner's use of hashed aggregation plan
-     * types. The default is <i>on</i>. <br>
+     * Set(enable_hashagg off) - Enables or disables the query planner's use of hashed
+     * aggregation plan types. The default is <i>on</i>. <br>
      * Set(enable_hashagg on)
      */
     public static final String HINT_ENABLE_HASH_AGG = "enable_hash_agg";
 
     /**
-     * Set(enable_hashjoin off) - Enables or disables the query planner's use of hash-join plan types.
-     * The default is <i>on</i>. <br>
+     * Set(enable_hashjoin off) - Enables or disables the query planner's use of hash-join
+     * plan types. The default is <i>on</i>. <br>
      * Set(enable_hashjoin on)
      */
     public static final String HINT_ENABLE_HASH_JOIN = "enable_hash_join";
 
     /**
-     * Set(enable_indexscan off) - Enables or disables the query planner's use of index-scan plan types.
-     * The default is <i>on</i>. <br>
+     * Set(enable_indexscan off) - Enables or disables the query planner's use of
+     * index-scan plan types. The default is <i>on</i>. <br>
      * Set(enable_indexscan on)
      */
     public static final String HINT_ENABLE_INDEX_SCAN = "enable_index_scan";
 
     /**
-     * Set(enable_indexonlyscan off) - Enables or disables the query planner's use of index-only-scan
-     * plan types. The default is <i>on</i>. <br>
+     * Set(enable_indexonlyscan off) - Enables or disables the query planner's use of
+     * index-only-scan plan types. The default is <i>on</i>. <br>
      * Set(enable_indexonlyscan on)
      */
     public static final String HINT_ENABLE_INDEX_ONLY_SCAN = "enable_index_only_scan";
 
     /**
-     * Set(enable_material off) - Enables or disables the query planner's use of materialization. It is
-     * impossible to suppress materialization entirely, but turning this variable off prevents the
-     * planner from inserting materialize nodes except in cases where it is required for correctness.
-     * The default is <i>on</i>. <br>
+     * Set(enable_material off) - Enables or disables the query planner's use of
+     * materialization. It is impossible to suppress materialization entirely, but turning
+     * this variable off prevents the planner from inserting materialize nodes except in
+     * cases where it is required for correctness. The default is <i>on</i>. <br>
      * Set(enable_material on)
      */
     public static final String HINT_ENABLE_MATERIAL = "enable_material";
 
     /**
-     * Set(enable_nestloop off) - Enables or disables the query planner's use of nested-loop join plans.
-     * It is impossible to suppress nested-loop joins entirely, but turning this variable off
-     * discourages the planner from using one if there are other methods available. The default is
-     * <i>on</i>. <br>
+     * Set(enable_nestloop off) - Enables or disables the query planner's use of
+     * nested-loop join plans. It is impossible to suppress nested-loop joins entirely,
+     * but turning this variable off discourages the planner from using one if there are
+     * other methods available. The default is <i>on</i>. <br>
      * Set(enable_nestloop on)
      */
     public static final String HINT_ENABLE_NEST_LOOP = "enable_nest_loop";
 
     /**
-     * Set(enable_partition_pruning off) - Enables or disables the query planner's ability to eliminate
-     * a partitioned table's partitions from query plans. This also controls the planner's ability to
-     * generate query plans which allow the query executor to remove (ignore) partitions during query
-     * execution. The default is <i>on</i>. <br>
+     * Set(enable_partition_pruning off) - Enables or disables the query planner's ability
+     * to eliminate a partitioned table's partitions from query plans. This also controls
+     * the planner's ability to generate query plans which allow the query executor to
+     * remove (ignore) partitions during query execution. The default is <i>on</i>. <br>
      * Set(enable_partition_pruning on)
      */
     public static final String HINT_ENABLE_PARTITION_PRUNING = "enable_partition_pruning";
 
     /**
-     * Set(enable_partitionwise_join on) - Enables or disables the query planner's use of partitionwise
-     * join, which allows a join between partitioned tables to be performed by joining the matching
-     * partitions. Partitionwise join currently applies only when the join conditions include all the
-     * partition keys, which must be of the same data type and have exactly matching sets of child
-     * partitions. Because partitionwise join planning can use significantly more CPU time and memory
-     * during planning, the default is <i>off</i>. <br>
+     * Set(enable_partitionwise_join on) - Enables or disables the query planner's use of
+     * partitionwise join, which allows a join between partitioned tables to be performed
+     * by joining the matching partitions. Partitionwise join currently applies only when
+     * the join conditions include all the partition keys, which must be of the same data
+     * type and have exactly matching sets of child partitions. Because partitionwise join
+     * planning can use significantly more CPU time and memory during planning, the
+     * default is <i>off</i>. <br>
      * Set(enable_partitionwise_join off)
      */
     public static final String HINT_ENABLE_PARTITION_WISE_JOIN = "enable_partition_wise_join";
 
     /**
-     * Set(enable_partitionwise_aggregate on) - Enables or disables the query planner's use of
-     * partitionwise grouping or aggregation, which allows grouping or aggregation on a partitioned
-     * tables performed separately for each partition. If the GROUP BY clause does not include the
-     * partition keys, only partial aggregation can be performed on a per-partition basis, and
-     * finalization must be performed later. Because partitionwise grouping or aggregation can use
-     * significantly more CPU time and memory during planning, the default is <i>off</i>. <br>
+     * Set(enable_partitionwise_aggregate on) - Enables or disables the query planner's
+     * use of partitionwise grouping or aggregation, which allows grouping or aggregation
+     * on a partitioned tables performed separately for each partition. If the GROUP BY
+     * clause does not include the partition keys, only partial aggregation can be
+     * performed on a per-partition basis, and finalization must be performed later.
+     * Because partitionwise grouping or aggregation can use significantly more CPU time
+     * and memory during planning, the default is <i>off</i>. <br>
      * Set(enable_partitionwise_aggregate off)
      */
     public static final String HINT_ENABLE_PARTITION_WISE_AGGREGATE = "enable_partition_wise_aggregate";
 
     /**
-     * Set(enable_seqscan off) - Enables or disables the query planner's use of sequential scan plan
-     * types. It is impossible to suppress sequential scans entirely, but turning this variable off
-     * discourages the planner from using one if there are other methods available. The default is
-     * <i>on</i>. <br>
+     * Set(enable_seqscan off) - Enables or disables the query planner's use of sequential
+     * scan plan types. It is impossible to suppress sequential scans entirely, but
+     * turning this variable off discourages the planner from using one if there are other
+     * methods available. The default is <i>on</i>. <br>
      * Set(enable_seqscan on)
      */
     public static final String HINT_ENABLE_SEQ_SCAN = "enable_seq_scan";
 
     /**
-     * Set(enable_sort off) - Enables or disables the query planner's use of explicit sort steps. It is
-     * impossible to suppress explicit sorts entirely, but turning this variable off discourages the
-     * planner from using one if there are other methods available. The default is <i>on</i>. <br>
+     * Set(enable_sort off) - Enables or disables the query planner's use of explicit sort
+     * steps. It is impossible to suppress explicit sorts entirely, but turning this
+     * variable off discourages the planner from using one if there are other methods
+     * available. The default is <i>on</i>. <br>
      * Set(enable_sort on)
      */
     public static final String HINT_ENABLE_SORT = "enable_sort";
@@ -262,5 +268,7 @@ public class PgsqlQueryHints {
         return HINTS;
     }
 
-    protected PgsqlQueryHints() {}
+    protected PgsqlQueryHints() {
+    }
+
 }

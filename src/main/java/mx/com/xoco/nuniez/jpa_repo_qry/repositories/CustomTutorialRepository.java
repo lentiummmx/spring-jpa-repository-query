@@ -9,4 +9,5 @@ public interface CustomTutorialRepository {
     List<Tutorial> findByPublishedNQ(boolean isPublished);
 
     List<Tutorial> findByPublishedNNQ(String titleDesc, boolean isPublished);
+
 }
