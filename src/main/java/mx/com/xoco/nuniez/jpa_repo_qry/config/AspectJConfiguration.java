@@ -8,8 +8,6 @@ import org.springframework.context.annotation.EnableLoadTimeWeaving;
 import org.springframework.context.annotation.LoadTimeWeavingConfigurer;
 import org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver;
 import org.springframework.instrument.classloading.LoadTimeWeaver;
-import org.springframework.instrument.classloading.ReflectiveLoadTimeWeaver;
-import org.springframework.instrument.classloading.tomcat.TomcatLoadTimeWeaver;
 
 @Configuration
 @EnableAspectJAutoProxy
@@ -27,5 +25,4 @@ public class AspectJConfiguration implements LoadTimeWeavingConfigurer {
         System.out.println("Configuring LoadTimeWeaver");
         return new InstrumentationLoadTimeWeaver();
     }
-
 }

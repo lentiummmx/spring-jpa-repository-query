@@ -1,5 +1,6 @@
 package mx.com.xoco.nuniez.jpa_repo_qry.controllers;
 
+import java.util.List;
 import mx.com.xoco.nuniez.jpa_repo_qry.models.Tutorial;
 import mx.com.xoco.nuniez.jpa_repo_qry.repositories.TutorialRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/tutorials")
@@ -69,8 +68,11 @@ public class TutorialRestController {
     @PostMapping(value = "/")
     Tutorial save() {
         int randomTick = Double.valueOf(Math.ceil(Math.random() * 10) * 1000).intValue();
-        return tutorialRepository.save(Tutorial.builder().title(String.format("Title %s", randomTick))
-                .description(String.format("Description %s", randomTick)).level(randomTick).published(Boolean.TRUE)
+        return tutorialRepository.save(Tutorial.builder()
+                .title(String.format("Title %s", randomTick))
+                .description(String.format("Description %s", randomTick))
+                .level(randomTick)
+                .published(Boolean.TRUE)
                 .build());
     }
 
@@ -81,5 +83,4 @@ public class TutorialRestController {
     private void showAll(List<Tutorial> tutorials) {
         tutorials.forEach(System.out::println);
     }
-
 }

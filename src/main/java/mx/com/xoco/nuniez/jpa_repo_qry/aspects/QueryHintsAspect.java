@@ -1,18 +1,13 @@
 package mx.com.xoco.nuniez.jpa_repo_qry.aspects;
 
+import java.util.Arrays;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.JpaQueryMethod;
-import org.springframework.stereotype.Component;
-
-import java.util.Arrays;
 
 @Aspect
 // @Component
@@ -25,22 +20,18 @@ public class QueryHintsAspect {
     // value)
 
     // @Pointcut("target(org.springframework.data.jpa.repository.query.AbstractJpaQuery)")
-    public void repositoryMethods() {
-    }
+    public void repositoryMethods() {}
 
     // @Pointcut("execution(*
     // org.springframework.data.jpa.repository.query.AbstractJpaQuery.*applyHints*(..)) &&
     // args(query, method)")
-    public void repositoryMethods1(ProceedingJoinPoint joinPoint, Query query, JpaQueryMethod method) {
-    }
+    public void repositoryMethods1(ProceedingJoinPoint joinPoint, Query query, JpaQueryMethod method) {}
 
     // @Pointcut("execution(* *..applyHints*(..)) && args(query, method)")
-    public void firstLongParamMethods(ProceedingJoinPoint joinPoint, Query query, JpaQueryMethod method) {
-    }
+    public void firstLongParamMethods(ProceedingJoinPoint joinPoint, Query query, JpaQueryMethod method) {}
 
     // @Pointcut("repositoryMethods() && firstLongParamMethods(joinPoint, query, method)")
-    public void entityCreationMethods(ProceedingJoinPoint joinPoint, Query query, JpaQueryMethod method) {
-    }
+    public void entityCreationMethods(ProceedingJoinPoint joinPoint, Query query, JpaQueryMethod method) {}
 
     // @AfterReturning(value = "entityCreationMethods(joinPoint, query, method)",
     // returning = "query")
@@ -117,7 +108,5 @@ public class QueryHintsAspect {
         System.out.println("******");
 
         return result;
-
     }
-
 }

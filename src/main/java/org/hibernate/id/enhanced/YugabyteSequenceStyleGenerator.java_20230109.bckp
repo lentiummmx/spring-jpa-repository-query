@@ -1,0 +1,114 @@
+package org.hibernate.id.enhanced;
+
+import java.util.Properties;
+import java.util.Random;
+
+import org.hibernate.dialect.MysqlDialect;
+import org.hibernate.MappingException;
+import org.hibernate.boot.model.naming.Identifier;
+import org.hibernate.boot.model.relational.QualifiedName;
+import org.hibernate.boot.model.relational.QualifiedNameParser;
+import org.hibernate.cfg.AvailableSettings;
+import org.hibernate.dialect.Dialect;
+import org.hibernate.engine.config.spi.ConfigurationService;
+import org.hibernate.engine.config.spi.StandardConverters;
+import org.hibernate.engine.jdbc.env.spi.JdbcEnvironment;
+import org.hibernate.id.IdentifierGenerator;
+import org.hibernate.id.enhanced.SequenceStyleGenerator;
+import org.hibernate.internal.util.StringHelper;
+import org.hibernate.internal.util.config.ConfigurationHelper;
+import org.hibernate.service.ServiceRegistry;
+import org.hibernate.type.Type;
+
+public class YugabyteSequenceStyleGenerator extends SequenceStyleGenerator {
+
+    /**
+     * @param type            The id property type descriptor
+     * @param params          param values, keyed by parameter name
+     * @param serviceRegistry Access to service that may be needed.
+     * @throws MappingException
+     */
+    @Override
+    public void configure(Type type, Properties params, ServiceRegistry serviceRegistry) throws MappingException {
+        final JdbcEnvironment jdbcEnvironment = serviceRegistry.getService( JdbcEnvironment.class );
+        final Dialect dialect = jdbcEnvironment.getDialect();
+
+        System.out.println(dialect);
+        System.out.println(dialect instanceof YugabyteDialect);
+        System.out.println(dialect instanceof MysqlDialect);
+
+        super.configure(type, params, serviceRegistry);
+    }
+
+    public static final String SEQUENCE_MAX_BUCKETS = "sequence_max_buckets";
+
+    /**
+     * Determine the name of the sequence (or table if this resolves to a physical table) to use.
+     * <p/>
+     * Called during {@link #configure configuration}.
+     *
+     * @param params The params supplied in the generator config (plus some standard useful extras).
+     * @param dialect The dialect in effect
+     * @param jdbcEnv The JdbcEnvironment
+     * @param serviceRegistry
+     * @return The sequence name
+     */
+    @Override
+    protected QualifiedName determineSequenceName(
+            Properties params,
+            Dialect dialect,
+            JdbcEnvironment jdbcEnv,
+            ServiceRegistry serviceRegistry) {
+        final String sequencePerEntitySuffix =
+                ConfigurationHelper.getString(CONFIG_SEQUENCE_PER_ENTITY_SUFFIX, params, DEF_SEQUENCE_SUFFIX);
+
+        String fallbackSequenceName = DEF_SEQUENCE_NAME;
+        final Boolean preferGeneratorNameAsDefaultName = serviceRegistry.getService(ConfigurationService.class)
+                .getSetting(
+                        AvailableSettings.PREFER_GENERATOR_NAME_AS_DEFAULT_SEQUENCE_NAME,
+                        StandardConverters.BOOLEAN,
+                        true);
+        if (preferGeneratorNameAsDefaultName) {
+            final String generatorName = params.getProperty(IdentifierGenerator.GENERATOR_NAME);
+            if (StringHelper.isNotEmpty(generatorName)) {
+                fallbackSequenceName = generatorName;
+            }
+        }
+
+        // JPA_ENTITY_NAME value honors <class ... entity-name="..."> (HBM) and @Entity#name (JPA)
+        // overrides.
+        final String defaultSequenceName =
+                ConfigurationHelper.getBoolean(CONFIG_PREFER_SEQUENCE_PER_ENTITY, params, false)
+                        ? params.getProperty(JPA_ENTITY_NAME) + sequencePerEntitySuffix
+                        : fallbackSequenceName;
+
+        String sequenceName = ConfigurationHelper.getString(SEQUENCE_PARAM, params, defaultSequenceName);
+
+        String sequenceNameReplace = "";
+        if(dialect instanceof YugabyteDialect) {
+            final int maxSequenceBuckets = ConfigurationHelper.getInt(SEQUENCE_MAX_BUCKETS, params, 0);
+            // if maxSequenceBuckets > 0 then update the sequence name using a random bucket from
+            // 0-maxSequenceBuckets
+            if (maxSequenceBuckets > 0) {
+                Random rand = new Random();
+                sequenceNameReplace = String.format("_%02d", rand.nextInt(maxSequenceBuckets));
+            }
+        }
+        sequenceName = String.format(sequenceName, sequenceNameReplace);
+
+        if (sequenceName.contains(".")) {
+            return QualifiedNameParser.INSTANCE.parse(sequenceName);
+        } else {
+            // todo : need to incorporate implicit catalog and schema names
+            final Identifier catalog = jdbcEnv.getIdentifierHelper().toIdentifier(
+                    ConfigurationHelper.getString(CATALOG, params));
+            final Identifier schema = jdbcEnv.getIdentifierHelper().toIdentifier(
+                    ConfigurationHelper.getString(SCHEMA, params));
+            return new QualifiedNameParser.NameParts(
+                    catalog,
+                    schema,
+                    jdbcEnv.getIdentifierHelper().toIdentifier(sequenceName));
+        }
+    }
+
+}

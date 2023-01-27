@@ -9,5 +9,4 @@ public class SpringBootJpaRepositoryQueryApplication {
     public static void main(String[] args) {
         SpringApplication.run(SpringBootJpaRepositoryQueryApplication.class, args);
     }
-
 }

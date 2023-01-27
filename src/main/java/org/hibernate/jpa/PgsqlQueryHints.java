@@ -268,7 +268,5 @@ public class PgsqlQueryHints {
         return HINTS;
     }
 
-    protected PgsqlQueryHints() {
-    }
-
+    protected PgsqlQueryHints() {}
 }

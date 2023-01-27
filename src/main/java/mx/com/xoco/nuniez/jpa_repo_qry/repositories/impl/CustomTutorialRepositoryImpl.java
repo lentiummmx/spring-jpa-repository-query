@@ -1,19 +1,16 @@
 package mx.com.xoco.nuniez.jpa_repo_qry.repositories.impl;
 
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import mx.com.xoco.nuniez.jpa_repo_qry.models.Tutorial;
 import mx.com.xoco.nuniez.jpa_repo_qry.repositories.CustomTutorialRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.QueryHintBinder;
 import org.hibernate.query.Query;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceContext;
-import java.util.List;
 
 @Repository
 public class CustomTutorialRepositoryImpl implements CustomTutorialRepository {
@@ -30,7 +27,8 @@ public class CustomTutorialRepositoryImpl implements CustomTutorialRepository {
         // Persistence.createEntityManagerFactory("jpa-tutorial");
         // EntityManager entityManager = emf.createEntityManager();
         // Get the Hibernate Session from the EntityManager in JPA
-        if (entityManager == null || (entityManagerFactory = entityManager.getEntityManagerFactory()) == null
+        if (entityManager == null
+                || (entityManagerFactory = entityManager.getEntityManagerFactory()) == null
                 || (session = entityManager.unwrap(Session.class)) == null
                 || (sessionFactory = session.getSessionFactory()) == null) {
             throw new NullPointerException("factory is not a hibernate factory");
@@ -41,7 +39,8 @@ public class CustomTutorialRepositoryImpl implements CustomTutorialRepository {
     private Session getSessionFromSessionFactory() {
         EntityManagerFactory entityManagerFactory = null;
         SessionFactory sessionFactory = null;
-        if (entityManager == null || (entityManagerFactory = entityManager.getEntityManagerFactory()) == null
+        if (entityManager == null
+                || (entityManagerFactory = entityManager.getEntityManagerFactory()) == null
                 || (sessionFactory = entityManagerFactory.unwrap(SessionFactory.class)) == null) {
             throw new NullPointerException("factory is not a hibernate factory");
         }
@@ -86,5 +85,4 @@ public class CustomTutorialRepositoryImpl implements CustomTutorialRepository {
         QueryHintBinder.getQueryHints(Tutorial.class, "NNQ_TUTORIALS_PUBLISHED").forEach(query::addQueryHint);
         return query.getResultList();
     }
-
 }

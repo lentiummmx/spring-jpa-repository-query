@@ -1,24 +1,18 @@
 package org.hibernate.dialect.hint;
 
 import ch.qos.logback.classic.db.names.TableName;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
 public class PgsqlQueryHintHandler implements QueryHintHandler {
 
     public static final PgsqlQueryHintHandler INSTANCE = new PgsqlQueryHintHandler();
 
-    private static final Pattern QUERY_PATTERN = Pattern.compile("^(select .*? from .*?)(.*?\\.{0,}.*?)( where.*?)$",
-            Pattern.CASE_INSENSITIVE);
+    private static final Pattern QUERY_PATTERN =
+            Pattern.compile("^(select .*? from .*?)(.*?\\.{0,}.*?)( where.*?)$", Pattern.CASE_INSENSITIVE);
 
     /**
      * @param query original query
@@ -85,9 +79,10 @@ public class PgsqlQueryHintHandler implements QueryHintHandler {
 
             return new StringBuilder("/*+ ")
                     .append(replaceTableNameWithAlias(hints, tableName.getTableName(), tableName.getTableAlias()))
-                    .append(" */ ").append(query).toString();
-        }
-        else {
+                    .append(" */ ")
+                    .append(query)
+                    .toString();
+        } else {
             return query;
         }
     }
@@ -101,11 +96,9 @@ public class PgsqlQueryHintHandler implements QueryHintHandler {
         String[] tableAlias = tableToken.split(" ");
         if (tableAlias.length == 1) {
             tableName = new TableName(tableToken, null);
-        }
-        else if (tableAlias.length == 2) {
+        } else if (tableAlias.length == 2) {
             tableName = new TableName(tableAlias[0], tableAlias[1]);
-        }
-        else if (tableAlias.length == 3 && tableAlias[1].equalsIgnoreCase("as")) {
+        } else if (tableAlias.length == 3 && tableAlias[1].equalsIgnoreCase("as")) {
             tableName = new TableName(tableAlias[0], tableAlias[2]);
         }
         return tableName;
@@ -136,7 +129,5 @@ public class PgsqlQueryHintHandler implements QueryHintHandler {
             }
             return "";
         }
-
     }
-
 }

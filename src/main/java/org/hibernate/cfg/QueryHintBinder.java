@@ -1,18 +1,17 @@
 package org.hibernate.cfg;
 
-import lombok.NonNull;
-import org.hibernate.cfg.annotations.QueryHintDefinition;
-import org.hibernate.jpa.PgsqlQueryHints;
-
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.persistence.NamedNativeQueries;
 import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.QueryHint;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import lombok.NonNull;
+import org.hibernate.cfg.annotations.QueryHintDefinition;
+import org.hibernate.jpa.PgsqlQueryHints;
 
 public class QueryHintBinder {
 
@@ -55,7 +54,5 @@ public class QueryHintBinder {
         // hints.getString(queryName, hintName));
         // return customQueryHints;
         return PgsqlQueryHints.getDefinedHints().stream().map(hintName -> hints.getString(queryName, hintName));
-
     }
-
 }

@@ -1,8 +1,7 @@
 package org.hibernate.dialect;
 
-import org.hibernate.dialect.hint.PgsqlQueryHintHandler;
-
 import java.util.List;
+import org.hibernate.dialect.hint.PgsqlQueryHintHandler;
 
 public class YugabyteDialect extends PostgreSQL82Dialect {
 
@@ -28,5 +27,4 @@ public class YugabyteDialect extends PostgreSQL82Dialect {
         // .toString();
         return PgsqlQueryHintHandler.INSTANCE.addQueryHints(query, hints);
     }
-
 }
