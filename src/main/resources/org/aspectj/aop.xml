@@ -1,0 +1,15 @@
+<!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "https://www.eclipse.org/aspectj/dtd/aspectj.dtd">
+<aspectj>
+
+    <weaver>
+        <!-- only weave classes in our application-specific packages -->
+        <include within="org.hibernate.query.internal.*"/>
+        <include within="org.springframework.boot..*" />
+    </weaver>
+
+    <aspects>
+        <!-- weave in just this aspect -->
+        <aspect name="mx.com.xoco.nuniez.jpa_repo_qry.aspects.QueryHintsAspect"/>
+    </aspects>
+
+</aspectj>
