@@ -72,6 +72,8 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     checkstyle("io.spring.javaformat:spring-javaformat-checkstyle:0.0.35")
+    extLibRuntime 'io.spring.javaformat:spring-javaformat-checkstyle:0.0.35'
+    extLibRuntime 'io.spring.javaformat:spring-javaformat-config:0.0.35'
 }
 
 tasks.named('test') {
