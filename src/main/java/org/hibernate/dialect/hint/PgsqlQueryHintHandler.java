@@ -1,11 +1,24 @@
 package org.hibernate.dialect.hint;
 
+import ch.qos.logback.classic.db.names.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PostgresqlQueryHintHandler implements QueryHintHandler {
-    public static final PostgresqlQueryHintHandler INSTANCE = new PostgresqlQueryHintHandler();
-    private static final Pattern QUERY_PATTERN = Pattern.compile("^(select .*? from .*?)(.*?\\..*?)( where.*?)$");
+public class PgsqlQueryHintHandler implements QueryHintHandler {
+    public static final PgsqlQueryHintHandler INSTANCE = new PgsqlQueryHintHandler();
+    private static final Pattern QUERY_PATTERN =
+            Pattern
+                    .compile("^(select .*? from .*?)(.*?\\.{0,}.*?)( where.*?)$"
+                            , Pattern.CASE_INSENSITIVE);
     /**
      * @param query original query
      * @param hints hints to be applied
@@ -19,8 +32,9 @@ public class PostgresqlQueryHintHandler implements QueryHintHandler {
             System.out.println(String.format("startToken :: %s", startToken));
             String tableToken = matcher.group(2);
             System.out.println(String.format("tableToken :: %s", tableToken));
-            String tableAlias = tableToken.split(" ")[1];
-            System.out.println(String.format("tableAlias :: %s", tableAlias));
+            TableName tableName = parseTableToken(tableToken);
+            System.out.println(String.format("tableName :: %s", tableName));
+            System.out.println(String.format("tableAlias :: %s", tableName.getTableAlias()));
             String endToken = matcher.group(3);
             System.out.println(String.format("endToken :: %s", endToken));
 
@@ -33,12 +47,53 @@ public class PostgresqlQueryHintHandler implements QueryHintHandler {
              */
 
             return new StringBuilder("/*+ ")
-                    .append(hints)
+                    .append(replaceTableNameWithAlias(hints, tableName.getTableName(), tableName.getTableAlias()))
                     .append(" */ ")
                     .append(query)
                     .toString();
         } else {
             return query;
+        }
+    }
+
+    private String replaceTableNameWithAlias(String hints, String tableName, String tableAlias) {
+        return hints.replaceFirst(tableName, tableAlias);
+    }
+
+    public TableName parseTableToken(String tableToken) {
+        TableName tableName = null;
+        String[] tableAlias = tableToken.split(" ");
+        if (tableAlias.length == 1) {
+            tableName =  new TableName(tableToken, null);
+        } else if (tableAlias.length == 2) {
+            tableName =  new TableName(tableAlias[0], tableAlias[1]);
+        } else if (tableAlias.length == 3 && tableAlias[1].equalsIgnoreCase("as")) {
+            tableName =  new TableName(tableAlias[0], tableAlias[2]);
+        }
+        return tableName;
+    }
+
+    @Getter
+    @ToString
+    @EqualsAndHashCode
+    private class TableName {
+        private String tableSchema;
+        private String tableName;
+        private String tableAlias;
+
+        public TableName(String tableName, String tableAlias) {
+            this.tableName = tableName;
+            this.tableAlias = tableAlias;
+            this.tableSchema = getTableSchema(tableName);
+        }
+
+        private String getTableSchema(String tableName) {
+            String[] schemaTable = tableName.split("\\.");
+            if (schemaTable.length > 1) {
+                this.tableName = schemaTable[1];
+                return schemaTable[0];
+            }
+            return "";
         }
     }
 }

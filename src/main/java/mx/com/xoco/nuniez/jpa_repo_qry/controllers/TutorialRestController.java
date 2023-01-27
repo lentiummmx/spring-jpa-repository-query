@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value ="/tutorials")
-public class TutorialRestControler {
+public class TutorialRestController {
     @Autowired
     TutorialRepository tutorialRepository;
 
@@ -46,7 +46,7 @@ public class TutorialRestControler {
 
     @GetMapping(value = "/titleAndPublishedNNQ")
     Tutorial findByTitleAndPublished() {
-        Tutorial tutorial = tutorialRepository.findByTitleAndPublished("00", true);
+        Tutorial tutorial = tutorialRepository.findByTitleAndPublished("Title 2000", true);
         show(tutorial);
         return tutorial;
     }

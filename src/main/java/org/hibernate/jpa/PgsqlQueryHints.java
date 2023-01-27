@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public class QueryHints {
+public class PgsqlQueryHints {
 
     /**
      * For to use to writing hint plans that contains hinting phrases. Hint phrases consist of hint
@@ -262,5 +262,5 @@ public class QueryHints {
         return HINTS;
     }
 
-    protected QueryHints() {}
+    protected PgsqlQueryHints() {}
 }

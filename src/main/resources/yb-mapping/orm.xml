@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="mx.com.xoco.nuniez.jpa_repo_qry.models">
+    <class name="Cat"
+           table="cats"
+           discriminator-value="C">
+
+        <id name="id" type="long">
+            <generator class="org.hibernate.id.TableHiLoGenerator">
+                <param name="table">uid_table</param>
+                <param name="column">next_hi_value_column</param>
+            </generator>
+        </id>
+    </class>
+</hibernate-mapping>

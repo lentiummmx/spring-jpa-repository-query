@@ -1,30 +1,58 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.0.1'
+    id 'org.springframework.boot' version '2.6.3'
     id 'io.spring.dependency-management' version '1.1.0'
+    //id "aspectj.AspectjGradlePlugin" version "0.0.8"
 }
+
+apply plugin: 'application'
 
 group = 'mx.com.xoco.nuniez'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
+sourceCompatibility = '11'
 
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+    extLibRuntime
+    extLibRuntime.transitive = false
 }
 
 repositories {
     mavenCentral()
 }
 
+task exportExtLibs(type: Copy) {
+    delete "ext-lib"
+    into "ext-libs"
+    from configurations.extLibRuntime
+}
+
+bootRun {
+    //systemProperties = System.properties
+    applicationDefaultJvmArgs = [
+            //"-javaagent:/Users/jose.morales/Workspaces/Prsnl/IdeaProjects/spring-boot-jpa-repository-query/ext-libs/spring-instrument-5.3.15.jar",
+            "-javaagent:ext-libs/spring-instrument-5.3.15.jar",
+            //"-javaagent:/Users/jose.morales/Workspaces/Prsnl/IdeaProjects/spring-boot-jpa-repository-query/ext-libs/aspectjweaver-1.9.5.jar",
+            //"-javaagent:ext-libs/aspectjweaver-1.9.5.jar",
+    ]
+}
+
 dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    extLibRuntime 'org.springframework:spring-instrument'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.h2database:h2'
-    runtimeOnly 'com.mysql:mysql-connector-j'
+    runtimeOnly 'mysql:mysql-connector-java'
     runtimeOnly 'org.postgresql:postgresql'
+    runtimeOnly 'com.yugabyte:jdbc-yugabytedb:42.3.5-yb-1'
+    implementation 'com.zaxxer:HikariCP:4.0.3'
+    implementation 'org.aspectj:aspectjweaver:1.9.5'
+    extLibRuntime 'org.aspectj:aspectjweaver:1.9.5'
+    implementation 'org.aspectj:aspectjrt:1.9.5'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
